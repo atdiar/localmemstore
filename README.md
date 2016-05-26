@@ -5,7 +5,7 @@
 A string-based in-memory K/V store for development purposes only.
 
 This is vendored by the `xhttp/session` library to implement a data storage facility for development purposes.
-This is an implement of a single instance (non-distributed), in-memory, unencrypted Key/Value store.
+This is an implementation of a single instance (non-distributed), in-memory, unencrypted Key/Value store.
 
 This is not fit for use in production.
 
@@ -17,7 +17,7 @@ The datastructure is a wrapper around a map type and it implements the below:
 // Store defines the interface that a session store should implement.
 // It should be made safe for concurrent use by multiple goroutines.
 //
-// NOTE: Expire sets a timeout for the validity of a session
+// NOTE: SetExpiry sets a timeout for the validity of a session
 // if t = 0, the session should expire immediately.
 // if t < 0, the session does not expire.
 type Store interface {
