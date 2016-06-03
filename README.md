@@ -31,7 +31,7 @@ type Store interface {
 
 
 Key/Value pairs are specific to a given id, for instance a User id.
-The persistence is set by id, meaning that Key/Value pairs belonging to the same ide have the same expiration date.
+The persistence is set by id, meaning that Key/Value pairs belonging to the same id have the same expiration date.
 
 ## License
 MIT
