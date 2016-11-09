@@ -86,5 +86,56 @@ func TestStorage(t *testing.T) {
 	if err == nil {
 		t.Error("Was expecting a 'Not found' error.")
 	}
+}
 
+func TestClear(t *testing.T) {
+	s := New().DefaultExpiry(9 * time.Millisecond)
+
+	// Let's test the clear() method
+	// Let's put some elements in it
+	err := s.Put("user1", "key1", []byte("some stuff"))
+	if err != nil {
+		t.Log(err)
+	}
+
+	err = s.Put("user1", "key2", []byte("some stuff again"))
+	if err != nil {
+		t.Log(err)
+	}
+
+	err = s.Put("user2", "key2", []byte("some foo"))
+	if err != nil {
+		t.Log(err)
+	}
+	// Applying the clear method
+	func(st Store) {
+		st.Clear()
+	}(s)
+
+	// Now if we attempt to retrieve any value, given the settings, we should not
+	// be able to since all the values are supposed to have been deleted.
+
+	v, err := s.Get("user1", "key1")
+	if v != nil {
+		t.Errorf("Was not expecting any value but got %v", v)
+	}
+	if err == nil {
+		t.Error("Was expecting a 'Not found' error.")
+	}
+
+	v, err = s.Get("user1", "key2")
+	if v != nil {
+		t.Errorf("Was not expecting any value but got %v", v)
+	}
+	if err == nil {
+		t.Error("Was expecting a 'Not found' error.")
+	}
+
+	v, err = s.Get("user2", "key2")
+	if v != nil {
+		t.Errorf("Was not expecting any value but got %v", v)
+	}
+	if err == nil {
+		t.Error("Was expecting a 'Not found' error.")
+	}
 }

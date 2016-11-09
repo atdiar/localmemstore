@@ -4,14 +4,13 @@
 
 A string-based in-memory K/V store for development purposes only.
 
-This is vendored by the `xhttp/session` library to implement a data storage facility for development purposes.
 This is an implementation of a single instance (non-distributed), in-memory, unencrypted Key/Value store.
 
 This is not fit for use in production.
 
 ## User Interface
 
-The datastructure is a wrapper around a map type and it implements the below:
+The datastructure is a wrapper around a map type, implementing the below:
 
 ``` go
 // Store defines the interface that a session store should implement.

@@ -172,6 +172,16 @@ func (s Store) Delete(id, key string) error {
 	return nil
 }
 
+// Clear will erase any data contained in the store.
+func (s Store) Clear() {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	for k := range s.container {
+		delete(s.container, k)
+	}
+}
+
 // SetExpiry modifies the deletion timeout for a given user.
 // Each entry in the key value store belongs to a given user, identified by
 // a unique ID number.
