@@ -10,17 +10,17 @@ func TestStorage(t *testing.T) {
 	s := New().DefaultExpiry(9 * time.Millisecond)
 
 	// Let's put some elements in it
-	err := s.Put("user1", "key1", []byte("some stuff"))
+	err := s.Put("user1", "key1", []byte("some stuff"), 98789)
 	if err != nil {
 		t.Log(err)
 	}
 
-	err = s.Put("user1", "key2", []byte("some stuff again"))
+	err = s.Put("user1", "key2", []byte("some stuff again"), 90789756)
 	if err != nil {
 		t.Log(err)
 	}
 
-	err = s.Put("user2", "key2", []byte("some foo"))
+	err = s.Put("user2", "key2", []byte("some foo"), 9787)
 	if err != nil {
 		t.Log(err)
 	}
@@ -93,17 +93,17 @@ func TestClear(t *testing.T) {
 
 	// Let's test the clear() method
 	// Let's put some elements in it
-	err := s.Put("user1", "key1", []byte("some stuff"))
+	err := s.Put("user1", "key1", []byte("some stuff"), 9877)
 	if err != nil {
 		t.Log(err)
 	}
 
-	err = s.Put("user1", "key2", []byte("some stuff again"))
+	err = s.Put("user1", "key2", []byte("some stuff again"), 5768586)
 	if err != nil {
 		t.Log(err)
 	}
 
-	err = s.Put("user2", "key2", []byte("some foo"))
+	err = s.Put("user2", "key2", []byte("some foo"), 65474568)
 	if err != nil {
 		t.Log(err)
 	}

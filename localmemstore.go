@@ -5,20 +5,22 @@ package localmemstore
 
 import (
 	"encoding/json"
-	"errors"
 	"sync"
 	"time"
+
+	"github.com/atdiar/errcode"
+	"github.com/atdiar/errors"
 )
 
 var (
 	// ErrNoID is returned when no session ID was found or the value was invalid.
-	ErrNoID = errors.New("No id or Invalid id.")
+	ErrNoID = errors.New("No id or Invalid id.").Code(errcode.NoID)
 	// errJSONEncoding is the error returned when the JSON (un)marshaller failed.
-	errJSONEncoding = errors.New("Error in JSON Serialization/Deserialization of session data.")
+	errJSONEncoding = errors.New("Error in JSON Serialization/Deserialization of session data.").Code(errcode.JSONEncoding)
 	// ErrExpired is returned when the session has expired.
-	ErrExpired = errors.New("Session has expired.")
+	ErrExpired = errors.New("Session has expired.").Code(errcode.Expired)
 	// errBadSession is returned when the session is in an invalid state.
-	errBadSession = errors.New("Session is invalid.")
+	errBadSession = errors.New("Session is invalid.").Code(errcode.BadSession)
 )
 
 // Store is the datastructure which implements the in-memory Key/Value store.
@@ -53,7 +55,7 @@ func (s Store) DefaultExpiry(t time.Duration) Store {
 	}
 }
 
-// The metadata type is used to add additional info about user ownership and
+// The metadata type is used to add info about user ownership and
 // user specific expiry of stored data.
 type metadata struct {
 	Key     Key
@@ -92,7 +94,7 @@ func (s Store) Get(id, key string) (res []byte, err error) {
 	userdata, ok := (s.container)[userkey]
 
 	if !ok {
-		return res, errors.New("User does not exist for ID: " + id)
+		return res, ErrNoID
 	}
 
 	m := new(metadata)
@@ -119,7 +121,7 @@ func (s Store) Get(id, key string) (res []byte, err error) {
 
 // Put will store some value in store for a given user under a given
 // key string.
-func (s Store) Put(id string, key string, value []byte) error {
+func (s Store) Put(id string, key string, value []byte, maxage time.Duration) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
@@ -199,6 +201,10 @@ func (s Store) SetExpiry(id string, t time.Duration) error {
 	}
 	(s.container)[userkey] = newuserdata
 	return nil
+}
+
+func (s Store) TimeToExpiry(id string, hkey string) (time.Duration, error) {
+	return s.TimeToExpiry(id, hkey)
 }
 
 // invalidate sets the expiration date to time 0.
